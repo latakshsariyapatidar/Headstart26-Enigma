@@ -37,6 +37,7 @@ export default function App() {
   const [selectedAdminTeam, setSelectedAdminTeam] = useState(null);
   const [currentLocationId, setCurrentLocationId] = useState(null);
   const [puzzleData, setPuzzleData] = useState(null);
+  const [hintLocationId, setHintLocationId] = useState(null);
 
   const navigate = (s, data = null) => {
     if (data) setSelectedAdminTeam(data);
@@ -113,7 +114,7 @@ export default function App() {
   }
 
   return (
-    <AppCtx.Provider value={{ navigate, team, setTeam, selectedAdminTeam, setSelectedAdminTeam, currentLocationId, setCurrentLocationId, puzzleData, setPuzzleData }}>
+    <AppCtx.Provider value={{ navigate, team, setTeam, selectedAdminTeam, setSelectedAdminTeam, currentLocationId, setCurrentLocationId, puzzleData, setPuzzleData, hintLocationId, setHintLocationId }}>
       <FontLink />
       <Screen />
     </AppCtx.Provider>

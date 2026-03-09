@@ -4,7 +4,7 @@ import TopBar from "../components/common/TopBar";
 import api from "../utils/api";
 
 export default function PuzzleScreen() {
-    const { navigate, team, setTeam, currentLocationId, puzzleData: ctxPuzzle, setPuzzleData, setCurrentLocationId } = useApp();
+    const { navigate, team, setTeam, currentLocationId, puzzleData: ctxPuzzle, setPuzzleData, setCurrentLocationId, setHintLocationId } = useApp();
     const [answer, setAnswer] = useState("");
     const [result, setResult] = useState(null); // null | correct | wrong
     const [attempts, setAttempts] = useState(0);
@@ -280,7 +280,7 @@ export default function PuzzleScreen() {
                         )}
                         <button
                             className="btn-secondary"
-                            onClick={() => navigate("hint")}
+                            onClick={() => { setHintLocationId(currentLocationId); navigate("hint"); }}
                             style={{ flex: 1, fontSize: 11 }}
                         >
                             💡 Hint

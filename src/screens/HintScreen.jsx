@@ -4,19 +4,19 @@ import TopBar from "../components/common/TopBar";
 import api from "../utils/api";
 
 export default function HintScreen() {
-    const { navigate, team, setTeam, currentLocationId } = useApp();
+    const { navigate, team, setTeam, hintLocationId } = useApp();
     const [confirmed, setConfirmed] = useState(false);
     const [hintText, setHintText] = useState("");
     const [loadingHint, setLoadingHint] = useState(false);
 
     const useHint = async () => {
-        if (!currentLocationId) {
+        if (!hintLocationId) {
             alert("No current location. Please scan the QR code first.");
             return;
         }
         setLoadingHint(true);
         try {
-            const res = await api.get(`/qrCode/getPuzzleHint/${currentLocationId}`);
+            const res = await api.get(`/qrCode/getPuzzleHint/${hintLocationId}`);
             setHintText(res.data.data.puzzleHint);
 
             try {
