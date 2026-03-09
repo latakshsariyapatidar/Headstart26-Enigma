@@ -38,7 +38,7 @@ export default function HintScreen() {
 
     return (
         <div className="screen" style={{ background: "var(--bg)" }}>
-            <TopBar title="Hint System" back="puzzle" />
+            <TopBar title="Puzzle Hint" back="puzzle" />
             <div
                 style={{
                     padding: "40px 20px",
@@ -61,12 +61,12 @@ export default function HintScreen() {
                                     marginBottom: 8,
                                 }}
                             >
-                                Request a Hint?
+                                Request a Puzzle Hint?
                             </div>
                             <div
                                 style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.6 }}
                             >
-                                Using a hint will deduct{" "}
+                                Using a puzzle hint will deduct{" "}
                                 <span style={{ color: "var(--danger)", fontWeight: 600 }}>
                                     5 points
                                 </span>{" "}
@@ -137,7 +137,7 @@ export default function HintScreen() {
                             style={{ display: "flex", flexDirection: "column", gap: 10 }}
                         >
                             <button className="btn-primary" onClick={useHint} disabled={loadingHint}>
-                                {loadingHint ? "Fetching..." : "Yes, Show Hint (−5 pts)"}
+                                {loadingHint ? "Fetching..." : "Yes, Show Puzzle Hint (−5 pts)"}
                             </button>
                             <button
                                 className="btn-secondary"
@@ -168,7 +168,7 @@ export default function HintScreen() {
                                     fontSize: 20,
                                 }}
                             >
-                                Here's Your Hint
+                                Here's Your Puzzle Hint
                             </div>
                         </div>
 

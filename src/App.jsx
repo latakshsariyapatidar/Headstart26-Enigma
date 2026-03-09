@@ -9,6 +9,7 @@ import DashboardScreen from "./screens/DashboardScreen";
 import QRVerifyScreen from "./screens/QRVerifyScreen";
 import PuzzleScreen from "./screens/PuzzleScreen";
 import HintScreen from "./screens/HintScreen";
+import ClueHintScreen from "./screens/ClueHintScreen";
 import NextClueScreen from "./screens/NextClueScreen";
 import AdminDashboardScreen from "./screens/AdminDashboardScreen";
 import AdminTeamDetailScreen from "./screens/AdminTeamDetailScreen";
@@ -21,6 +22,7 @@ const SCREENS = {
   "qr-verify": QRVerifyScreen,
   puzzle: PuzzleScreen,
   hint: HintScreen,
+  "clue-hint": ClueHintScreen,
   "next-clue": NextClueScreen,
   "admin-dashboard": AdminDashboardScreen,
   "admin-team-detail": AdminTeamDetailScreen,

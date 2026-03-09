@@ -199,7 +199,7 @@ export default function DashboardScreen() {
                     )}
                     <button
                         className="btn-danger"
-                        onClick={() => navigate("hint")}
+                        onClick={() => navigate("clue-hint")}
                         style={{
                             marginTop: 14,
                             width: "auto",
@@ -207,7 +207,7 @@ export default function DashboardScreen() {
                             fontSize: 11,
                         }}
                     >
-                        💡 Request Hint (−5 pts)
+                        🔍 Request Clue Hint (−5 pts)
                     </button>
                 </div>
 
