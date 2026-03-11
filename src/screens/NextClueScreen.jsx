@@ -2,8 +2,8 @@ import { useApp } from "../context/AppContext";
 import TopBar from "../components/common/TopBar";
 
 export default function NextClueScreen() {
-    const { navigate, team } = useApp();
-    const isFinal = team.round > team.totalRounds;
+    const { navigate, team, gameCompleted } = useApp();
+    const isFinal = gameCompleted;
 
     if (isFinal)
         return (

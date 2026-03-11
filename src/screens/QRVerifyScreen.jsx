@@ -5,7 +5,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import api from "../utils/api";
 
 export default function QRVerifyScreen() {
-  const { navigate, setPuzzleData, setCurrentLocationId, team, setTeam, setGameCompleted } = useApp();
+  const { navigate, setPuzzleData, setCurrentLocationId, team, setTeam, setGameCompleted, gameCompleted } = useApp();
   const [status, setStatus] = useState("idle"); // idle | checking | correct | wrong
   const [errorMsg, setErrorMsg] = useState("");
   const scannerRef = useRef(null);
@@ -37,34 +37,28 @@ export default function QRVerifyScreen() {
         setStatus("correct");
         try { await html5QrCode.stop(); } catch (e) { }
 
-        // Check if this was the final round (Round 8) — game auto-completes
-        if (team.round === team.totalRounds) {
-          // Re-fetch progress to get final state
-          try {
-            const progressRes = await api.get("/teamProgress/progress");
-            const pd = progressRes.data.data;
-            if (pd) {
-              setCurrentLocationId(pd.locationId || pd.currentLocationId || null);
-              setTeam((t) => ({
-                ...t,
-                score: pd.score,
-                round: pd.currentRound,
-                totalRounds: pd.totalRounds || t.totalRounds,
-                hintsUsed: pd.hintsUsed || 0,
-              }));
-            } else {
-              // Backend returned null — event completed
-              setGameCompleted(true);
-              setTeam((t) => ({ ...t, round: t.totalRounds + 1 }));
-            }
-          } catch (e) {
-            // Even if progress fetch fails, mark as completed
+        // Re-fetch progress to determine if game completed (final round)
+        try {
+          const progressRes = await api.get("/teamProgress/progress");
+          const pd = progressRes.data.data;
+          if (!pd) {
+            // Final round — game completed
             setGameCompleted(true);
-            setTeam((t) => ({ ...t, round: t.totalRounds + 1 }));
+            setTimeout(() => navigate("next-clue"), 1500);
+          } else {
+            // Normal round — store puzzle data and go to puzzle
+            setPuzzleData(res.data.data);
+            setCurrentLocationId(scannedLocId);
+            setTeam((t) => ({
+              ...t,
+              score: pd.score,
+              round: pd.currentRound ?? t.round,
+              hintsUsed: pd.hintsUsed || 0,
+            }));
+            setTimeout(() => navigate("puzzle"), 1500);
           }
-          setTimeout(() => navigate("next-clue"), 1500);
-        } else {
-          // Normal round — store puzzle data and go to puzzle
+        } catch (e) {
+          // Fallback: assume normal round
           setPuzzleData(res.data.data);
           setCurrentLocationId(scannedLocId);
           setTimeout(() => navigate("puzzle"), 1500);
@@ -168,10 +162,10 @@ export default function QRVerifyScreen() {
         {status === "correct" && (
           <div className="card fade-up" style={{ border: "1px solid var(--accent2)", background: "rgba(94,232,160,0.06)", width: "100%", textAlign: "center" }}>
             <div style={{ color: "var(--accent2)", fontFamily: "var(--font-display)", fontWeight: 700, marginBottom: 6 }}>
-              {team.round === team.totalRounds ? "Hunt Complete!" : "Location Verified!"}
+              {gameCompleted ? "Hunt Complete!" : "Location Verified!"}
             </div>
             <div style={{ color: "var(--muted)", fontSize: 13 }}>
-              {team.round === team.totalRounds ? "Finalizing your score…" : "Unlocking your puzzle…"}
+              {gameCompleted ? "Finalizing your score\u2026" : "Unlocking your puzzle\u2026"}
             </div>
           </div>
         )}

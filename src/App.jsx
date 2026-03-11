@@ -58,18 +58,20 @@ export default function App() {
             const progressRes = await api.get("/teamProgress/progress");
             const progressData = progressRes.data.data;
             if (progressData) {
-              setCurrentLocationId(progressData.locationId || progressData.currentLocationId || null);
+              setCurrentLocationId(progressData.locationId || null);
               setTeam({
                 id: userData.name,
                 score: progressData.score || 0,
-                round: progressData.currentRound || 1,
+                round: progressData.currentRound ?? 0,
                 totalRounds: progressData.totalRounds || 8,
-                clue: progressData.clue?.text || progressData.clue || "",
-                clueImage: progressData.clue?.image || null,
-                clueAudio: progressData.clue?.audio || null,
+                clue: progressData.clue || "",
                 hintsUsed: progressData.hintsUsed || 0,
                 name: userData.name,
               });
+              // At round 0, puzzle comes directly from progress
+              if (progressData.currentRound === 0 && progressData.puzzle) {
+                setPuzzleData(progressData.puzzle);
+              }
               setGameCompleted(false);
             } else {
               // Event completed (backend returns null data)
@@ -77,7 +79,7 @@ export default function App() {
               setTeam({
                 id: userData.name,
                 score: 0,
-                round: 9,
+                round: 0,
                 totalRounds: 8,
                 hintsUsed: 0,
                 name: userData.name,
@@ -87,7 +89,7 @@ export default function App() {
             setTeam({
               id: userData.name,
               score: 0,
-              round: 1,
+              round: 0,
               totalRounds: 8,
               hintsUsed: 0,
               name: userData.name,

@@ -6,9 +6,9 @@ import api from "../utils/api";
 
 export default function DashboardScreen() {
     const { navigate, team, setTeam, setCurrentLocationId, gameCompleted } = useApp();
-    const isBaseCamp = team.round === 1;
-    const isCompleted = team.round > team.totalRounds || gameCompleted;
-    const progress = isCompleted ? 100 : ((Math.max(0, team.round - 1)) / team.totalRounds) * 100;
+    const isBaseCamp = team.round === 0;
+    const isCompleted = gameCompleted;
+    const progress = isCompleted ? 100 : (team.round / (team.totalRounds || 1)) * 100;
 
     const handleLogout = async () => {
         try {
@@ -122,7 +122,7 @@ export default function DashboardScreen() {
                         >
                             <span>Hunt Progress</span>
                             <span>
-                                {team.round - 1}/{team.totalRounds} complete
+                                {team.round}/{team.totalRounds} complete
                             </span>
                         </div>
                         <div
@@ -163,57 +163,75 @@ export default function DashboardScreen() {
                     />
                 </div>
 
-                {/* Current Clue */}
-                <div
-                    className="fade-up-3 card"
-                    style={{ borderLeft: "3px solid var(--accent)" }}
-                >
+                {/* Current Clue / Base Camp */}
+                {!isCompleted && (
                     <div
-                        style={{
-                            fontSize: 11,
-                            color: "var(--accent)",
-                            letterSpacing: "0.12em",
-                            textTransform: "uppercase",
-                            marginBottom: 10,
-                        }}
+                        className="fade-up-3 card"
+                        style={{ borderLeft: "3px solid var(--accent)" }}
                     >
-                        Current Clue
+                        {isBaseCamp ? (
+                            <>
+                                <div
+                                    style={{
+                                        fontSize: 11,
+                                        color: "var(--accent)",
+                                        letterSpacing: "0.12em",
+                                        textTransform: "uppercase",
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    Base Camp
+                                </div>
+                                <div
+                                    style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: 15,
+                                        lineHeight: 1.6,
+                                        color: "var(--text)",
+                                    }}
+                                >
+                                    Your first puzzle is ready! Solve it to receive your first clue.
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div
+                                    style={{
+                                        fontSize: 11,
+                                        color: "var(--accent)",
+                                        letterSpacing: "0.12em",
+                                        textTransform: "uppercase",
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    Current Clue
+                                </div>
+                                <div
+                                    style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: 15,
+                                        lineHeight: 1.6,
+                                        color: "var(--text)",
+                                    }}
+                                >
+                                    "{team.clue || "No clue available yet."}"
+                                </div>
+                                <button
+                                    className="btn-danger"
+                                    onClick={() => navigate("clue-hint")}
+                                    style={{
+                                        marginTop: 14,
+                                        width: "auto",
+                                        padding: "7px 16px",
+                                        fontSize: 11,
+                                    }}
+                                >
+                                    🔍 Request Clue Hint (−5 pts)
+                                </button>
+                            </>
+                        )}
                     </div>
-                    <div
-                        style={{
-                            fontFamily: "var(--font-display)",
-                            fontSize: 15,
-                            lineHeight: 1.6,
-                            color: "var(--text)",
-                        }}
-                    >
-                        "{team.clue || "No clue available yet."}"
-                    </div>
-                    {team.clueImage && (
-                        <img
-                            src={team.clueImage}
-                            alt="Clue"
-                            style={{ marginTop: 10, width: "100%", borderRadius: 2, border: "1px solid var(--border)" }}
-                        />
-                    )}
-                    {team.clueAudio && (
-                        <audio controls src={team.clueAudio} style={{ marginTop: 10, width: "100%" }} />
-                    )}
-                    {!isBaseCamp && !isCompleted && (
-                        <button
-                            className="btn-danger"
-                            onClick={() => navigate("clue-hint")}
-                            style={{
-                                marginTop: 14,
-                                width: "auto",
-                                padding: "7px 16px",
-                                fontSize: 11,
-                            }}
-                        >
-                            🔍 Request Clue Hint (−5 pts)
-                        </button>
-                    )}
-                </div>
+                )}
 
                 {/* Action buttons */}
                 <div
