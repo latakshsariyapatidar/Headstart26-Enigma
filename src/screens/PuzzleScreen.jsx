@@ -169,7 +169,7 @@ export default function PuzzleScreen() {
                         {puzzleData?.text || "No puzzle content found."}
                     </div>
                     {/* Puzzle image */}
-                    {puzzleData?.image ? (
+                    {puzzleData?.image && (
                         <img
                             src={puzzleData.image}
                             alt="Puzzle"
@@ -180,22 +180,6 @@ export default function PuzzleScreen() {
                                 border: "1px solid var(--border)",
                             }}
                         />
-                    ) : (
-                        <div
-                            style={{
-                                marginTop: 16,
-                                border: "1px dashed var(--border)",
-                                height: 100,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "var(--muted)",
-                                fontSize: 12,
-                                borderRadius: 2,
-                            }}
-                        >
-                            [ No image for this puzzle ]
-                        </div>
                     )}
                     {/* Puzzle audio */}
                     {puzzleData?.audio && (
