@@ -62,7 +62,7 @@ export default function App() {
               setTeam({
                 id: userData.name,
                 score: progressData.score || 0,
-                round: progressData.currentRound ?? 1,
+                round: progressData.currentRound || 1,
                 totalRounds: progressData.totalRounds || 8,
                 clue: progressData.clue?.text || progressData.clue || "",
                 clueImage: progressData.clue?.image || null,
@@ -70,10 +70,6 @@ export default function App() {
                 hintsUsed: progressData.hintsUsed || 0,
                 name: userData.name,
               });
-              // Round 0: puzzle is included in progress response
-              if (progressData.currentRound === 0 && progressData.puzzle) {
-                setPuzzleData(progressData.puzzle);
-              }
               setGameCompleted(false);
             } else {
               // Event completed (backend returns null data)

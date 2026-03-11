@@ -6,7 +6,7 @@ import api from "../utils/api";
 
 export default function DashboardScreen() {
     const { navigate, team, setTeam, setCurrentLocationId, gameCompleted } = useApp();
-    const isRoundZero = team.round === 0;
+    const isBaseCamp = team.round === 1;
     const isCompleted = team.round > team.totalRounds || gameCompleted;
     const progress = isCompleted ? 100 : ((Math.max(0, team.round - 1)) / team.totalRounds) * 100;
 
@@ -199,7 +199,7 @@ export default function DashboardScreen() {
                     {team.clueAudio && (
                         <audio controls src={team.clueAudio} style={{ marginTop: 10, width: "100%" }} />
                     )}
-                    {!isRoundZero && !isCompleted && (
+                    {!isBaseCamp && !isCompleted && (
                         <button
                             className="btn-danger"
                             onClick={() => navigate("clue-hint")}
@@ -232,7 +232,7 @@ export default function DashboardScreen() {
                         </div>
                     ) : (
                         <>
-                            {!isRoundZero && (
+                            {!isBaseCamp && (
                                 <button
                                     className="btn-primary pulse-btn"
                                     onClick={() => navigate("qr-verify")}
@@ -241,7 +241,7 @@ export default function DashboardScreen() {
                                 </button>
                             )}
                             <button className="btn-secondary" onClick={() => navigate("puzzle")}>
-                                🧩 {isRoundZero ? "Solve Base Camp Puzzle" : "Go to Current Puzzle"}
+                                🧩 {isBaseCamp ? "Solve Base Camp Puzzle" : "Go to Current Puzzle"}
                             </button>
                         </>
                     )}
