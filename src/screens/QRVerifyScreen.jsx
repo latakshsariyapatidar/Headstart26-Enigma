@@ -66,6 +66,32 @@ export default function QRVerifyScreen() {
 
       } catch (err) {
         console.error("QR Verification Failed", err);
+
+        // If the QR call failed (e.g. 500 at final round), check if game actually completed
+        if (err.response?.status === 500 || err.response?.status >= 400) {
+          try {
+            const progressRes = await api.get("/teamProgress/progress");
+            const pd = progressRes.data.data;
+            if (!pd) {
+              // Game completed despite the QR endpoint error (final round backend bug)
+              setGameCompleted(true);
+              setStatus("correct");
+              try { await html5QrCode.stop(); } catch (e) { }
+              setTimeout(() => navigate("next-clue"), 1500);
+              return;
+            }
+          } catch (progressErr) {
+            // If progress fetch also says "Event Completed" via message
+            if (progressErr.response?.data?.message === "Event Completed") {
+              setGameCompleted(true);
+              setStatus("correct");
+              try { await html5QrCode.stop(); } catch (e) { }
+              setTimeout(() => navigate("next-clue"), 1500);
+              return;
+            }
+          }
+        }
+
         setStatus("wrong");
         setErrorMsg(err.response?.data?.message || "Location verification failed");
 
